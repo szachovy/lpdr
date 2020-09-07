@@ -11,7 +11,7 @@
 License plate extractor with optical character recognition.
 
 
-#### :arrow_forward: If you want to understand all the underlying processes please read my <paper> on it. :arrow_backward:
+#### :arrow_forward: If you want to understand all the underlying processes please read my [paper](https://www.researchgate.net/publication/344154400_Matrix_operations_on_License_Plate_Detector_and_Recognizer_LPDR) on it. :arrow_backward:
 
 ## :rocket: How it works
 ![diagram](https://github.com/szachovy/lpdr/blob/master/test_images/diagram.png)
@@ -83,6 +83,9 @@ Here are the options available, you can change them as you wish.:
 - OEM
 - PSM
 
+**Warning!**
+_Depending on the tensorflow version there might be some issues with keras. Upgrade TF to 2.0 or higher if you can._
+
 ## :rocket: Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
@@ -101,6 +104,19 @@ Please make sure to update the tests as appropriate.
 
 ## :rocket: Author
 - Wiktor Jakub Maj
+
+If you use lpdr in your work please cite my paper!
+
+```
+@article{article,
+author = {Maj, Wiktor},
+year = {2020},
+month = {09},
+pages = {1-13},
+title = {Matrix operations on License Plate Detector and Recognizer (LPDR)}
+}
+
+```
 
 ## :rocket: License
 [MIT](https://opensource.org/licenses/MIT)

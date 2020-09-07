@@ -14,6 +14,7 @@ from pytesseract import image_to_string
 import argparse
 import os
 import stat
+import pkg_resources
 #------
 
 ### tesseract utility for Windows
@@ -22,11 +23,11 @@ import stat
 ### defaults for argparser (uncomment and change if needed)
 #DEFAULT_CAPTURE=False
 #DEFAULT_IMAGE_PATH='image.png' 
-#DEFAULT_NET_PATH='wpod-net/wpod-net_update1' # see self.__net_path
+DEFAULT_NET_PATH='lpdr/wpod_net/wpod_net_update1' # see self.__net_path
 
 def readable(path):
     ''' 
-        Check if the source path for the captured image or wpod-net is readable.
+        Check if the source path for the captured image or wpod_net is readable.
         
         Args:
             path: relative path to the destination file.
@@ -142,7 +143,7 @@ class LPD(metaclass=ArgParser):
     With given settings:    
         - Load the image from an existent source or take the photo of the car (by default) or motorcycle.
         - Process the image to the appropriate form.
-        - Load the wpod-net model and predict given a matrix.
+        - Load the wpod_net model and predict given a matrix.
         - Find the points where the probability of an object is above a given threshold
         - Collect affines from the corresponding point and transform to coordinates
         - Non-Max-Suppression
@@ -172,11 +173,11 @@ class LPD(metaclass=ArgParser):
         self._size = None
         
         ##### detection settings #####
-        # destination path to wpod-net files without extensions
+        # destination path to wpod_net files without extensions
         try:
             self.__net_path = DEFAULT_NET_PATH
         except NameError:
-            self.__net_path = 'wpod-net/wpod-net_update1'
+            self.__net_path = None
         
         # iou threshold in nms operation
         self.__iou_threshold = 0.1 
@@ -226,10 +227,14 @@ class LPD(metaclass=ArgParser):
   
     @property
     def net_path(self):
-        if readable(''.join([self.__net_path, '.h5'])) and readable(''.join([self.__net_path, '.json'])):
-            return self.__net_path 
-        else:
-            raise Exception('netpath is not readable')
+        try: 
+            if readable(''.join([self.__net_path, '.h5'])) and readable(''.join([self.__net_path, '.json'])):
+                return self.__net_path 
+                
+            else:
+                raise Exception('netpath is not readable')
+        except FileNotFoundError:
+            return
     
     @property
     def iou_threshold(self):
@@ -304,15 +309,16 @@ class LPD(metaclass=ArgParser):
         
     def load_model(self):
         '''
-            Load the wpod-net to 
+            Load the wpod_net to 
             predict an input matrix source.
             
             Returns:
-                wpod-net with pre-trained weights
+                wpod_net with pre-trained weights
         '''
-        json_file = open('{}.json'.format(self.net_path), 'r')
+
+        json_file = open(pkg_resources.resource_filename(__name__, '/'.join(('wpod_net', 'wpod_net_update1.json'))), 'r') if self.net_path is None else open('{}.json'.format(self.net_path), 'r')
         model = model_from_json(json_file.read(), custom_objects={})
-        model.load_weights('{}.h5'.format(self.net_path))
+        model.load_weights(pkg_resources.resource_filename(__name__, '/'.join(('wpod_net', 'wpod_net_update1.h5'))) if self.net_path is None else '{}.h5'.format(self.net_path)) 
         json_file.close()
         return model
         
@@ -499,7 +505,7 @@ class LPD(metaclass=ArgParser):
         def get_Y(self):
             '''
                 Predicts probabilities with affines
-                on the X matrix using wpod-net model.
+                on the X matrix using wpod_net model.
             '''
             if self.capture:
                 self.video()
