@@ -10,13 +10,14 @@ DESCRIPTION = 'License Plate Detector and Recognizer'
 URL = 'https://github.com/szachovy/lpdr'
 EMAIL = 'wjmaj98@gmail.com'
 AUTHOR = 'Wiktor Maj'
-VERSION = '0.1'
+VERSION = '0.2'
 
 REQUIRED = [
-    'numpy>=1.17.4',
+    'numpy==1.17.4',
     'opencv-python==4.1.2.30',
-    'Keras>=2.3.1',
-    'pytesseract>=0.3.4'
+    'Keras==2.3.1',
+    'pytesseract==0.3.4',
+    'tensorflow==1.14.0'
 ]
 
 #REQUIRED = parse_requirements('requirements.txt')

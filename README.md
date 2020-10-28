@@ -31,6 +31,9 @@ _Recommended_: Clone this repo for direct lpdr usage.
 git clone https://github.com/szachovy/lpdr.git
 ```
 
+**Warning!**
+_Tested on Python 3.7.4_
+
 ## :rocket: Usage
 ### Case 1: LPDR as a module
 ```python
